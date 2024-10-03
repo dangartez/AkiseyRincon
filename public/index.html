@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RinconAkisey - Reserva de Citas</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
+    <style>
+        /* Botones grandes para categoría y servicio */
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+
+        .button-container button {
+            width: 100%;
+            max-width: 300px;
+            padding: 15px;
+            margin: 10px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            background-color: #088d61;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button-container button:hover {
+            background-color: rgb(3, 66, 40);
+        }
+
+        .button-container button:active {
+            background-color: rgb(119, 11, 101);
+        }
+
+        /* Estilos para el modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .close-modal {
+            background-color: red;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .close-modal:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Reserva tu Cita - El Rincon de Akisey</h1>
+    </header>
+
+    <!-- Formulario de autenticación -->
+    <section id="auth-section">
+        <h2>Iniciar Sesión / Registrarse</h2>
+        <input type="email" id="email" placeholder="Correo electrónico">
+        <input type="password" id="password" placeholder="Contraseña">
+        <button onclick="register()">Registrar</button>
+        <button onclick="login()">Iniciar Sesión</button>
+        <p id="auth-message"></p>
+    </section>
+
+    <!-- Selección de categoría y servicio -->
+    <section id="service-selection-section" style="display:none;">
+        <h2>Elige Categoría y Servicio</h2>
+
+        <!-- Botones para seleccionar categoría -->
+        <div id="category-buttons" class="button-container"></div>
+
+        <!-- Botones para seleccionar servicio, se cargan dinámicamente -->
+        <div id="service-buttons" class="button-container" style="display: none;"></div>
+
+
+
+        <!-- Mostrar detalles del servicio -->
+        <p id="service-duration"></p>
+        <p id="service-description"></p>
+    </section>
+
+    <!-- Calendario de reservas -->
+    <section id="calendar-section" style="display:none;">
+        <h2>Seleccionar Fecha y Hora</h2>
+
+        <!-- Calendario para seleccionar el día -->
+        <div id="calendar"></div>
+    </section>
+
+    <!-- Calendario de reservas -->
+<section id="calendar-section" style="display:none;">
+    <h2>Seleccionar Fecha y Hora</h2>
+
+    <!-- Calendario para seleccionar el día -->
+    <div id="calendar"></div>
+
+    <!-- Sección para seleccionar la hora -->
+    <div id="time-select-section" style="display:none;">
+        <h3>Selecciona una hora:</h3>
+        <select id="time-select"></select>
+    </div>
+</section>
+
+
+    <!-- Modal para la selección de horas -->
+    <div id="time-modal" class="modal">
+        <div class="modal-content">
+            <h2>Elige una hora</h2>
+            <div id="time-options" class="button-container"></div>
+            <button class="close-modal" onclick="closeTimeModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Modal para la confirmación de la reserva -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <h2>Confirmar Reserva</h2>
+            <p id="service-summary"></p>
+            <p id="date-summary"></p>
+            <p id="time-summary"></p>
+            <button onclick="confirmAppointment()">Confirmar Reserva</button>
+            <button class="close-modal" onclick="closeConfirmationModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Cargar Firebase y FullCalendar -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+
+    <!-- Configuración de Firebase -->
+    <script src="js/firebase-config.js"></script>
+    <!-- Lógica de la aplicación -->
+    <script src="js/app.js"></script>
+</body>
+</html>

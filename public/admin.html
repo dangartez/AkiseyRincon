@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RinconAkisey - Panel de Administración</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Panel de Administración - RinconAkisey</h1>
+    </header>
+
+    <!-- Gestión de servicios -->
+    <section id="service-section">
+        <h2>Gestión de Servicios</h2>
+        <input type="text" id="service-name" placeholder="Nombre del Servicio">
+        <input type="number" id="service-duration" placeholder="Duración del Servicio (min)">
+        <button onclick="addService()">Agregar Servicio</button>
+        <h3>Lista de Servicios</h3>
+        <ul id="service-list"></ul>
+    </section>
+
+    <script src="/__/firebase/10.0.0/firebase-app.js"></script>
+    <script src="/__/firebase/10.0.0/firebase-auth.js"></script>
+    <script src="/__/firebase/10.0.0/firebase-firestore.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
