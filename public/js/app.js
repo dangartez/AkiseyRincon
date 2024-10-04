@@ -53,7 +53,84 @@ function login() {
         });
 }
 
-// Función para mostrar la selección de categoría y servicio
+// Mostrar opciones tras iniciar sesión
+function showUserOptions() {
+    const optionsModal = document.getElementById('user-options-modal');
+    optionsModal.style.display = 'block';
+}
+
+// Mostrar citas programadas
+function showUserAppointments() {
+    const appointmentsModal = document.getElementById('appointments-modal');
+    appointmentsModal.style.display = 'block';
+    loadUserAppointments(); // Cargar citas
+}
+
+// Cargar las citas del usuario (futuras e históricas)
+function loadUserAppointments() {
+    const user = auth.currentUser;
+    if (user) {
+        const upcomingAppointments = [];
+        const pastAppointments = [];
+        
+        db.collection('appointments').where('userId', '==', user.uid).get()
+            .then(snapshot => {
+                snapshot.forEach(doc => {
+                    const appointment = doc.data();
+                    const appointmentDate = new Date(appointment.date);
+                    const now = new Date();
+                    
+                    if (appointmentDate >= now) {
+                        upcomingAppointments.push(appointment);
+                    } else {
+                        pastAppointments.push(appointment);
+                    }
+                });
+                displayAppointments(upcomingAppointments, 'upcoming');
+                displayAppointments(pastAppointments, 'history');
+            });
+    }
+}
+
+// Mostrar citas en pantalla
+function displayAppointments(appointments, type) {
+    const container = document.getElementById(type === 'upcoming' ? 'upcoming-appointments' : 'historical-appointments');
+    container.innerHTML = '';
+    
+    appointments.forEach(app => {
+        const appointmentDiv = document.createElement('div');
+        appointmentDiv.textContent = `${app.date} - ${app.time} - Servicio: ${app.serviceId}`;
+        container.appendChild(appointmentDiv);
+    });
+}
+
+// Mostrar formulario de reserva
+function showNewReservationOptions() {
+    const reservationModal = document.getElementById('reservation-modal');
+    reservationModal.style.display = 'block';
+}
+
+// Buscar citas por día o por rango
+function searchByTime() {
+    const searchType = document.querySelector('input[name="search-type"]:checked').value;
+    if (searchType === 'day') {
+        showCalendar();
+    } else if (searchType === 'time-range') {
+        showTimeRangePicker();
+    }
+}
+
+// Función para agregar múltiples servicios
+function addAnotherService() {
+    const serviceSelectSection = document.getElementById('service-selection-section');
+    const newService = document.createElement('div');
+    newService.innerHTML = serviceSelectSection.innerHTML; // Clonar la sección de servicio
+    serviceSelectSection.appendChild(newService);
+}
+
+
+// *****
+// Función para mostrar la selección de categoría y servicio 
 function showServiceSelection() {
     document.getElementById('auth-section').style.display = 'none';
     document.getElementById('service-selection-section').style.display = 'block';

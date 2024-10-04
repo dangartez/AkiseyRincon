@@ -6,37 +6,34 @@
     <title>RinconAkisey - Reserva de Citas</title>
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
+
     <style>
-        /* Botones grandes para categoría y servicio */
+        /* Estilos generales */
+        body, html {
+            font-family: Arial, sans-serif;
+        }
+
         .button-container {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
-            margin: 10px 0;
+            justify-content: space-around;
         }
 
-        .button-container button {
-            width: 100%;
-            max-width: 300px;
-            padding: 15px;
+        .button {
+            padding: 10px 20px;
             margin: 10px;
-            font-size: 18px;
+            background-color: #088d61;
+            color: white;
             border: none;
             border-radius: 5px;
-            background-color: #088d61;
             cursor: pointer;
-            transition: background-color 0.3s;
+            font-size: 16px;
         }
 
-        .button-container button:hover {
-            background-color: rgb(3, 66, 40);
+        .button:hover {
+            background-color: #066d4e;
         }
 
-        .button-container button:active {
-            background-color: rgb(119, 11, 101);
-        }
-
-        /* Estilos para el modal */
         .modal {
             display: none;
             position: fixed;
@@ -54,7 +51,7 @@
             padding: 20px;
             border-radius: 5px;
             width: 80%;
-            max-width: 400px;
+            max-width: 500px;
             text-align: center;
         }
 
@@ -70,7 +67,26 @@
         .close-modal:hover {
             background-color: darkred;
         }
+
+        .modal .button-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Estilo para modales de navegación */
+        #user-options-modal .button-container {
+            flex-direction: column;
+        }
+
+        .modal p {
+            font-size: 16px;
+        }
+
+        .modal h2 {
+            font-size: 20px;
+        }
     </style>
+
 </head>
 <body>
     <header>
@@ -87,47 +103,50 @@
         <p id="auth-message"></p>
     </section>
 
-    <!-- Selección de categoría y servicio -->
-    <section id="service-selection-section" style="display:none;">
-        <h2>Elige Categoría y Servicio</h2>
-
-        <!-- Botones para seleccionar categoría -->
-        <div id="category-buttons" class="button-container"></div>
-
-        <!-- Botones para seleccionar servicio, se cargan dinámicamente -->
-        <div id="service-buttons" class="button-container" style="display: none;"></div>
-
-
-
-        <!-- Mostrar detalles del servicio -->
-        <p id="service-duration"></p>
-        <p id="service-description"></p>
-    </section>
-
-    <!-- Calendario de reservas -->
-    <section id="calendar-section" style="display:none;">
-        <h2>Seleccionar Fecha y Hora</h2>
-
-        <!-- Calendario para seleccionar el día -->
-        <div id="calendar"></div>
-    </section>
-
-    <!-- Calendario de reservas -->
-<section id="calendar-section" style="display:none;">
-    <h2>Seleccionar Fecha y Hora</h2>
-
-    <!-- Calendario para seleccionar el día -->
-    <div id="calendar"></div>
-
-    <!-- Sección para seleccionar la hora -->
-    <div id="time-select-section" style="display:none;">
-        <h3>Selecciona una hora:</h3>
-        <select id="time-select"></select>
+    <!-- Modal para opciones de usuario -->
+    <div id="user-options-modal" class="modal">
+        <div class="modal-content">
+            <h2>Elige una opción</h2>
+            <div class="button-container">
+                <button class="button" onclick="showUserAppointments()">Tus Citas</button>
+                <button class="button" onclick="showNewReservationOptions()">Hacer Reserva</button>
+                <button class="button" onclick="showUserProfile()">Tu Perfil</button>
+            </div>
+            <button class="close-modal" onclick="closeModal('user-options-modal')">Cerrar</button>
+        </div>
     </div>
-</section>
 
+    <!-- Modal para ver citas programadas -->
+    <div id="appointments-modal" class="modal">
+        <div class="modal-content">
+            <h2>Ver tus Citas</h2>
+            <div class="button-container">
+                <button class="button" onclick="showUpcomingAppointments()">Siguientes Citas Reservadas</button>
+                <button class="button" onclick="showHistoricalAppointments()">Historial de Citas</button>
+            </div>
+            <div id="upcoming-appointments"></div>
+            <div id="historical-appointments"></div>
+            <button class="close-modal" onclick="closeModal('appointments-modal')">Cerrar</button>
+        </div>
+    </div>
 
-    <!-- Modal para la selección de horas -->
+    <!-- Modal para nueva reserva -->
+    <div id="reservation-modal" class="modal">
+        <div class="modal-content">
+            <h2>Hacer una Nueva Reserva</h2>
+            <p>Elige cómo quieres buscar tu cita:</p>
+            <label>
+                <input type="radio" name="search-type" value="day" checked> Buscar por día
+            </label>
+            <label>
+                <input type="radio" name="search-type" value="time-range"> Buscar por rango de horas
+            </label>
+            <button class="button" onclick="searchByTime()">Buscar</button>
+            <button class="close-modal" onclick="closeModal('reservation-modal')">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Modal para seleccionar hora -->
     <div id="time-modal" class="modal">
         <div class="modal-content">
             <h2>Elige una hora</h2>
@@ -136,7 +155,7 @@
         </div>
     </div>
 
-    <!-- Modal para la confirmación de la reserva -->
+    <!-- Modal para confirmar la reserva -->
     <div id="confirmation-modal" class="modal">
         <div class="modal-content">
             <h2>Confirmar Reserva</h2>
